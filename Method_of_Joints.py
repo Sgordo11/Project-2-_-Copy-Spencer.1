@@ -20,8 +20,8 @@ def UnknownBars(node):
 
 # Determine if a node if "viable" or not
 def NodeIsViable(node):
-    unknown = UnknownBars(node)
-    if unknown == 1 or 2:
+    unknown = len(UnknownBars(node))
+    if unknown == 1 or unknown == 2:
         return True
     else:
         return False
@@ -29,9 +29,7 @@ def NodeIsViable(node):
 
 # Compute unknown force in bar due to sum of the
 # forces in the x direction
-def SumOfForcesInLocalX(node, unknown_bars):
-    local_x_bar = unknown_bars[0]
-    other_bar = unknown_bars[1]
+def SumOfForcesInLocalX(node, local_x_bar):
     local_x_vector = geom.BarNodeToVector(node, local_x_bar)
 
     my_sum = 0
@@ -51,11 +49,11 @@ def SumOfForcesInLocalX(node, unknown_bars):
             cosine_of_bars = geom.CosineBars(local_x_bar, bar)
             my_sum += bar_force * cosine_of_bars
 
-    force_other = -my_sum / geom.CosineBars(local_x_bar, other_bar)
+    force_other = -my_sum / geom.CosineBars(local_x_bar, local_x_bar)
 
-    other_bar.SetAxialLoad(force_other)
+    local_x_bar.SetAxialLoad(force_other)
 
-    other_bar.is_computed = True
+    local_x_bar.is_computed = True
 
 
 # Compute unknown force in bar due to sum of the 
@@ -66,9 +64,9 @@ def SumOfForcesInLocalY(node, unknown_bars):
     local_x_vector = geom.BarNodeToVector(node, local_x_bar)
 
     my_sum = 0
-    x_forces = node.GetNetXforce()
+    x_forces = node.GetNetXForce()
     # get the x force created by Dr.Shepard
-    y_forces = node.GetNetYforce()
+    y_forces = node.GetNetYForce()
 
     global_x_dir = [1, 0]
     global_y_dir = [0, 1]
@@ -82,7 +80,7 @@ def SumOfForcesInLocalY(node, unknown_bars):
             sin_of_bars = geom.SineBars(local_x_bar, bar)
             my_sum += bar_force * sin_of_bars
 
-    force_other = -my_sum/geom.SineBars(other_bar, local_x_bar)
+    force_other = -my_sum/geom.SineBars(local_x_bar,other_bar)
 
     other_bar.SetAxialLoad(force_other)
 
@@ -112,7 +110,7 @@ def IterateUsingMethodOfJoints(nodes,bars):
                 unknown_bars = UnknownBars(node)
                 if len(unknown_bars) == 2:
                     SumOfForcesInLocalY(node, unknown_bars)
-                SumOfForcesInLocalX(node, unknown_bars)
+                SumOfForcesInLocalX(node, unknown_bars[0])
         counter +=1
         if counter > len(nodes) + 1:
             sys.exit("Too many iterations")
