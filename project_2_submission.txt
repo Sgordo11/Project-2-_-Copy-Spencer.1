@@ -84,5 +84,5 @@ Q82:: 11.32
 Q83::N
 Q84::N
 Q85::N
-Q86:: T
-Q87:: T
+Q86:: Increasing the number of nodes in a truss generally increases the number of panels, which shortens member lengths and allows loads to be distributed among more members. This can reduce internal forces and decrease the chance of buckling in compression members. Additionally, angling members in the bottom chord improves triangulation and allows forces to be resolved into axial components in both the horizontal and vertical directions, increasing structural efficiency.
+Q87:: The truss that should be selected is the scissor truss because it provides greater structural efficiency while reducing overall material costs. The scissor configuration uses shorter, angled members, which improves load distribution and allows forces to be carried primarily through axial tension and compression. Shorter members are also less susceptible to buckling in compression, increasing the overall strength and stability of the system. Additionally, the geometry of the scissor truss reduces the amount of material required in the center span compared to other truss types, making it more cost-effective. Because the members are generally shorter and arranged more efficiently, the scissor truss can achieve the required strength while using less material, resulting in long-term savings.
